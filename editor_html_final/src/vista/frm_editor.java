@@ -82,8 +82,6 @@ public class frm_editor extends javax.swing.JFrame {
         } catch (Exception ex) {
         }
     }
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -349,9 +347,8 @@ public class frm_editor extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(rootPane, Integer.toString(conta) + " coincidencias encontradas", "Coincidencias", JOptionPane.INFORMATION_MESSAGE);
         resaltar(txt_entrada, buscar);
     }//GEN-LAST:event_menu_buscarActionPerformed
-    
-    
-     public void resaltarindividual(JTextComponent txt, String palabra) {
+
+    public void resaltarindividual(JTextComponent txt, String palabra) {
         quitarResaltado(txt_entrada);
         try {
             Highlighter res = txt.getHighlighter();
@@ -365,7 +362,7 @@ public class frm_editor extends javax.swing.JFrame {
         } catch (Exception ex) {
         }
     }
-    
+
     private void menu_replaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_replaceActionPerformed
         int conta = 0;
         String buscar, elemento, reemplazar, resultado;
@@ -373,9 +370,13 @@ public class frm_editor extends javax.swing.JFrame {
         buscar = JOptionPane.showInputDialog(rootPane, "Ingrese la palabra que desea buscar:", "Buscar", JOptionPane.PLAIN_MESSAGE);
         while (palabras.hasMoreElements()) {
             elemento = palabras.nextToken();
+            resaltarindividual(txt_entrada, buscar);
+            //
+            
+            //
             if (elemento.toLowerCase().equals(buscar.toLowerCase())) {
 
-                resaltarindividual(txt_entrada, buscar);
+                //resaltarindividual(txt_entrada, buscar);
                 int opcion = JOptionPane.showConfirmDialog(null, "Desea cambiar el registro", "cambiar", JOptionPane.YES_OPTION, HEIGHT);
 
                 if (opcion == 0) {
@@ -390,8 +391,8 @@ public class frm_editor extends javax.swing.JFrame {
                 }
             }
         }
-        //buscar en linea 65 por la funcion
-        /*int opcion = JOptionPane.showConfirmDialog(null, "Desea cambiar el registro", "Agregar", JOptionPane.YES_OPTION, HEIGHT);
+        //buscar en linea 65 por la funcion 
+        /*int// opcion = JOptionPane.showConfirmDialog(null, "Desea cambiar el registro", "Agregar", JOptionPane.YES_OPTION, HEIGHT);
 
         if (opcion == 1) {
             reemplazar = JOptionPane.showInputDialog(rootPane, Integer.toString(conta) + " coincidencias encontradas\n" + "Con que palabra desea reemplazar el texto buscado:", "Reemplazar", JOptionPane.PLAIN_MESSAGE);
@@ -404,9 +405,9 @@ public class frm_editor extends javax.swing.JFrame {
 
     private void cortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarActionPerformed
         // TODO add your handling code here:
-        String seleccionar=txt_entrada.getSelectedText();
+        String seleccionar = txt_entrada.getSelectedText();
         Clipboard portapapeles = Toolkit.getDefaultToolkit().getSystemClipboard();
-        StringSelection seleccionado= new StringSelection(seleccionar);
+        StringSelection seleccionado = new StringSelection(seleccionar);
         portapapeles.setContents(seleccionado, seleccionado);
         txt_entrada.cut();
         JOptionPane.showMessageDialog(null, "texto cortado: ");
@@ -414,21 +415,21 @@ public class frm_editor extends javax.swing.JFrame {
 
     private void pegarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pegarActionPerformed
         // TODO add your handling code here:
-        String pegado="";
-        Clipboard portapapeles= Toolkit.getDefaultToolkit().getSystemClipboard();
+        String pegado = "";
+        Clipboard portapapeles = Toolkit.getDefaultToolkit().getSystemClipboard();
         //Transferable contenido=portapapeles.getContents(this);
-        
-            try {  
-                pegado = (String) portapapeles.getContents(this).getTransferData(DataFlavor.stringFlavor);
-                //pegado = (String) contenido.getTransferData(DataFlavor.stringFlavor);
-            } catch (UnsupportedFlavorException ex) {
-                Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+        try {
+            pegado = (String) portapapeles.getContents(this).getTransferData(DataFlavor.stringFlavor);
+            //pegado = (String) contenido.getTransferData(DataFlavor.stringFlavor);
+        } catch (UnsupportedFlavorException ex) {
+            Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //txta_texto.getMousePosition();
-        
-        txt_entrada.append(" "+pegado);
+
+        txt_entrada.append(" " + pegado);
         JOptionPane.showMessageDialog(null, "texto pegado: ");
     }//GEN-LAST:event_pegarActionPerformed
 
