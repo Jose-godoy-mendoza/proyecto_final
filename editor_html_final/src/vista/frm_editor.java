@@ -364,33 +364,36 @@ public class frm_editor extends javax.swing.JFrame {
     }
 
     private void menu_replaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_replaceActionPerformed
-        int conta = 0;
+        int conta = 0, i=0;
         String buscar;
         String palabras[] = new String[100];
         String[] lineas = txt_entrada.getText().split("\\r?\\n");
         txt_entrada.getHighlighter().removeAllHighlights();
         Highlighter.HighlightPainter marcador = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
         buscar = JOptionPane.showInputDialog(rootPane, "Ingrese la palabra que desea buscar:", "Buscar", JOptionPane.PLAIN_MESSAGE);
+        String texto = txt_entrada.getText();
+        
 
-        for (int i = 0; i < lineas.length; i++) {
-
-            StringTokenizer token_palabras = new StringTokenizer(lineas[i]);
+            StringTokenizer token_palabras = new StringTokenizer(texto);
 
             while (token_palabras.hasMoreElements()) {
                 palabras[i] = token_palabras.nextToken();
+                System.out.println(palabras[i]);
                 if (palabras[i].equals(buscar)) 
                 {
-                    int posicion = lineas[i].indexOf(palabras[i]) + palabras[i].length();
-                    System.out.println("la palabra es: " + palabras[i] + "  el inicio: " + lineas[i].indexOf(palabras[i]) + " el final: " + posicion);
+                    int posicion = texto.indexOf(palabras[i]) + palabras[i].length();
+                    System.out.println("la palabra es: " + palabras[i] + "  el inicio: " + texto.indexOf(palabras[i]) + " el final: " + posicion);
                     txt_entrada.getHighlighter().removeAllHighlights();
                     try {
-                        txt_entrada.getHighlighter().addHighlight(lineas[i].indexOf(palabras[i]), posicion, marcador);
+                        txt_entrada.getHighlighter().addHighlight(texto.indexOf(palabras[i]), posicion, marcador);
                     } catch (BadLocationException ex) {
                         Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    i++;
                 }
+                i++;
             }
-        }
+        
     }//GEN-LAST:event_menu_replaceActionPerformed
 
     private void cortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarActionPerformed
