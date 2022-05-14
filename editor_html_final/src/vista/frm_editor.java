@@ -348,59 +348,49 @@ public class frm_editor extends javax.swing.JFrame {
         resaltar(txt_entrada, buscar);
     }//GEN-LAST:event_menu_buscarActionPerformed
 
-    public void resaltarindividual(JTextComponent txt, String palabra) {
+    public void resaltarindividual(JTextComponent txt, String palabra, int inicio, int fin) {
         quitarResaltado(txt_entrada);
         try {
             Highlighter res = txt.getHighlighter();
             Document doc = txt.getDocument();
             String text = doc.getText(0, doc.getLength());
             int pos = 0;
-            while ((pos = text.toUpperCase().indexOf(palabra.toUpperCase(), pos)) >= 0) {
-                res.addHighlight(pos, pos + palabra.length(), resaltador);
-                pos += palabra.length();
-            }
+
+            res.addHighlight(inicio, fin, resaltador);
+
+            //pos += palabra.length();
         } catch (Exception ex) {
         }
     }
 
     private void menu_replaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_replaceActionPerformed
         int conta = 0;
-        String buscar, elemento, reemplazar, resultado;
-        StringTokenizer palabras = new StringTokenizer(txt_entrada.getText());
+        String buscar;
+        String palabras[] = new String[100];
+        String[] lineas = txt_entrada.getText().split("\\r?\\n");
+        txt_entrada.getHighlighter().removeAllHighlights();
+        Highlighter.HighlightPainter marcador = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
         buscar = JOptionPane.showInputDialog(rootPane, "Ingrese la palabra que desea buscar:", "Buscar", JOptionPane.PLAIN_MESSAGE);
-        while (palabras.hasMoreElements()) {
-            elemento = palabras.nextToken();
-            resaltarindividual(txt_entrada, buscar);
-            //
-            
-            //
-            if (elemento.toLowerCase().equals(buscar.toLowerCase())) {
 
-                //resaltarindividual(txt_entrada, buscar);
-                int opcion = JOptionPane.showConfirmDialog(null, "Desea cambiar el registro", "cambiar", JOptionPane.YES_OPTION, HEIGHT);
+        for (int i = 0; i < lineas.length; i++) {
 
-                if (opcion == 0) {
-                    //reemplazar = JOptionPane.showInputDialog(rootPane, Integer.toString(conta) + "Con que palabra desea reemplazar el texto buscado:", "Reemplazar", JOptionPane.PLAIN_MESSAGE);
-                    reemplazar = JOptionPane.showInputDialog(rootPane, "Con que palabra desea reemplazar el texto buscado:", "Reemplazar", JOptionPane.PLAIN_MESSAGE);
-                    elemento = txt_entrada.getText();
-                    resultado = elemento.replace(buscar, reemplazar);
-                    txt_entrada.setText("");
-                    txt_entrada.setText(resultado);
-                } else if (opcion == 1) {
-                    conta++;
+            StringTokenizer token_palabras = new StringTokenizer(lineas[i]);
+
+            while (token_palabras.hasMoreElements()) {
+                palabras[i] = token_palabras.nextToken();
+                if (palabras[i].equals(buscar)) 
+                {
+                    int posicion = lineas[i].indexOf(palabras[i]) + palabras[i].length();
+                    System.out.println("la palabra es: " + palabras[i] + "  el inicio: " + lineas[i].indexOf(palabras[i]) + " el final: " + posicion);
+                    txt_entrada.getHighlighter().removeAllHighlights();
+                    try {
+                        txt_entrada.getHighlighter().addHighlight(lineas[i].indexOf(palabras[i]), posicion, marcador);
+                    } catch (BadLocationException ex) {
+                        Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
-        //buscar en linea 65 por la funcion 
-        /*int// opcion = JOptionPane.showConfirmDialog(null, "Desea cambiar el registro", "Agregar", JOptionPane.YES_OPTION, HEIGHT);
-
-        if (opcion == 1) {
-            reemplazar = JOptionPane.showInputDialog(rootPane, Integer.toString(conta) + " coincidencias encontradas\n" + "Con que palabra desea reemplazar el texto buscado:", "Reemplazar", JOptionPane.PLAIN_MESSAGE);
-            elemento = txt_entrada.getText();
-            resultado = elemento.replace(buscar, reemplazar);
-            txt_entrada.setText("");
-            txt_entrada.setText(resultado);
-        }*/
     }//GEN-LAST:event_menu_replaceActionPerformed
 
     private void cortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarActionPerformed
