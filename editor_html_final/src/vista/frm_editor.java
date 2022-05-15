@@ -364,22 +364,19 @@ public class frm_editor extends javax.swing.JFrame {
     }
 
     private void menu_replaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_replaceActionPerformed
-        int conta = 0, i=0;
+        int conta = 0, i = 0, j = 0, k = 0;
         String buscar;
+        int inicios[] = new int[100];
+        int finales[] = new int[100];
         String palabras[] = new String[100];
-        String[] lineas = txt_entrada.getText().split("\\r?\\n");
         txt_entrada.getHighlighter().removeAllHighlights();
         Highlighter.HighlightPainter marcador = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
         buscar = JOptionPane.showInputDialog(rootPane, "Ingrese la palabra que desea buscar:", "Buscar", JOptionPane.PLAIN_MESSAGE);
         String texto = txt_entrada.getText();
-        
 
-            StringTokenizer token_palabras = new StringTokenizer(texto);
+        StringTokenizer token_palabras = new StringTokenizer(texto);
 
-            while (token_palabras.hasMoreElements()) {
-                palabras[i] = token_palabras.nextToken();
-                System.out.println(palabras[i]);
-                if (palabras[i].equals(buscar)) 
+        /*if (palabras[i].equals(buscar)) 
                 {
                     int posicion = texto.indexOf(palabras[i]) + palabras[i].length();
                     System.out.println("la palabra es: " + palabras[i] + "  el inicio: " + texto.indexOf(palabras[i]) + " el final: " + posicion);
@@ -389,11 +386,27 @@ public class frm_editor extends javax.swing.JFrame {
                     } catch (BadLocationException ex) {
                         Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    i++;
-                }
-                i++;
+                    //break;
+                    
+                }*/
+        var idx = texto.indexOf(buscar);
+        while (idx != -1) {
+            inicios[k] = idx;
+            finales[k] = idx + buscar.length();
+            idx = texto.indexOf(buscar, idx + 1);
+            System.out.println("inicios: " + inicios[k] + " finales: " + finales[k]);
+
+            //txt_entrada.getHighlighter().removeAllHighlights();
+            try {
+                txt_entrada.getHighlighter().addHighlight(inicios[k], finales[k], marcador);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
+
+            k++;
+
+        }
+
     }//GEN-LAST:event_menu_replaceActionPerformed
 
     private void cortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarActionPerformed
