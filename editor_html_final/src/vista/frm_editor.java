@@ -364,36 +364,31 @@ public class frm_editor extends javax.swing.JFrame {
     }
 
     private void menu_replaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_replaceActionPerformed
-        int conta = 0, i = 0, j = 0, k = 0;
-        String buscar;
+        int conta = 0, i = 0, j = 0, k = 0, validar = 0, nuevo_index = 0, sustituir = 0;
         int inicios[] = new int[100];
         int finales[] = new int[100];
+        String buscar, reemplazar;
         String palabras[] = new String[100];
+        String texto = txt_entrada.getText();
+        StringBuilder builder = new StringBuilder(texto);
         txt_entrada.getHighlighter().removeAllHighlights();
         Highlighter.HighlightPainter marcador = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
         buscar = JOptionPane.showInputDialog(rootPane, "Ingrese la palabra que desea buscar:", "Buscar", JOptionPane.PLAIN_MESSAGE);
-        String texto = txt_entrada.getText();
 
-        StringTokenizer token_palabras = new StringTokenizer(texto);
-
-        /*if (palabras[i].equals(buscar)) 
-                {
-                    int posicion = texto.indexOf(palabras[i]) + palabras[i].length();
-                    System.out.println("la palabra es: " + palabras[i] + "  el inicio: " + texto.indexOf(palabras[i]) + " el final: " + posicion);
-                    txt_entrada.getHighlighter().removeAllHighlights();
-                    try {
-                        txt_entrada.getHighlighter().addHighlight(texto.indexOf(palabras[i]), posicion, marcador);
-                    } catch (BadLocationException ex) {
-                        Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //break;
-                    
-                }*/
         var idx = texto.indexOf(buscar);
         while (idx != -1) {
-            inicios[k] = idx;
-            finales[k] = idx + buscar.length();
-            idx = texto.indexOf(buscar, idx + 1);
+            if (validar == 0) {
+                inicios[k] = idx;
+                finales[k] = idx + buscar.length();
+                idx = texto.indexOf(buscar, idx + 1);
+            }
+            if (validar == 1) {
+                inicios[k] = idx + nuevo_index;
+                finales[k] = idx + buscar.length() + nuevo_index;
+                idx = texto.indexOf(sustituir, idx + 1);
+            }
+            //nuevo_index = 0;
+
             System.out.println("inicios: " + inicios[k] + " finales: " + finales[k]);
 
             //txt_entrada.getHighlighter().removeAllHighlights();
@@ -402,7 +397,23 @@ public class frm_editor extends javax.swing.JFrame {
             } catch (BadLocationException ex) {
                 Logger.getLogger(frm_editor.class.getName()).log(Level.SEVERE, null, ex);
             }
+            int opcion = JOptionPane.showConfirmDialog(null, "¿Quiere reemplazar esta palabra?", "", JOptionPane.YES_NO_OPTION);
+            if (opcion == 0) {
+                reemplazar = JOptionPane.showInputDialog(rootPane, "¿Por que palabra quiere reemplazar?", "Reemplazar", JOptionPane.PLAIN_MESSAGE);
+                builder.replace(inicios[k], finales[k], reemplazar);
+                nuevo_index = buscar.length() - reemplazar.length();
+                sustituir=reemplazar.length();
+                //String conversion = builder.toString();
+                //String reemplazo = texto.substring(inicios[k])+reemplazar+texto.substring(finales[k]);
 
+                nuevo_index = reemplazar.length() - buscar.length();
+
+                txt_entrada.setText(builder.toString());
+                validar = 1;
+            } else {
+                txt_entrada.getHighlighter().removeAllHighlights();
+                validar = 0;
+            }
             k++;
 
         }
